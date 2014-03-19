@@ -24,8 +24,9 @@ module Formtastic
           when :has_and_belongs_to_many, :has_many, :references_and_referenced_in_many, :references_many
             :"#{method.to_s.singularize}_ids"
           else
-            return reflection.foreign_key.to_sym if reflection.respond_to?(:foreign_key)
+            return reflection.foreign_key.to_sym if reflection.respond_to?(:foreign_key) && reflection.foreign_key
             return reflection.options[:foreign_key].to_sym unless reflection.options[:foreign_key].blank?
+            return :"#{reflection.as}_id" if reflection.respond_to?(:as) && reflection.as?
             :"#{method}_id"
           end
         else
